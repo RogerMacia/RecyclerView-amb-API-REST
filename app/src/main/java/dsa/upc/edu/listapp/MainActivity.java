@@ -1,7 +1,9 @@
 package dsa.upc.edu.listapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageView ivAdd;
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.my_recycler_view);
         swipeRefreshLayout = findViewById(R.id.my_swipe_refresh);
+        ivAdd = findViewById(R.id.ivAdd);
 
         recyclerView.setHasFixedSize(true);
 
@@ -63,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(
                 () -> doApiCall(swipeRefreshLayout)
         );
+
+        ivAdd.setOnClickListener(
+                v -> addTrack()
+        );
     }
 
     private void doApiCall(final SwipeRefreshLayout mySwipeRefreshLayout) {
@@ -90,5 +98,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void addTrack() {
+        Intent intent = new Intent(MainActivity.this, AddTrackActivity.class);
+        startActivity(intent);
     }
 }
