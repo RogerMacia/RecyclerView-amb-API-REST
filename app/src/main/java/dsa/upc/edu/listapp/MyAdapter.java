@@ -49,6 +49,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         notifyItemRemoved(position);
     }
 
+    public Track getItem(int position) {
+        return values.get(position);
+    }
+
     public MyAdapter() {
         values = new ArrayList<>();
     }
@@ -66,15 +70,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         Track t = values.get(position);
         final String title = t.getTitle();
         holder.txtHeader.setText(title);
-        holder.txtHeader.setOnClickListener(v -> remove(holder.getBindingAdapterPosition()));
 
         holder.txtFooter.setText("Singer: " + t.getSinger());
 
-        /*
         Glide.with(holder.icon.getContext())
-                .load(t.avatar_url)
+                .load("http://147.83.7.203:8080/img/logodsa.png")
                 .into(holder.icon);
-         */
     }
 
     @Override

@@ -58,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        adapter.remove(viewHolder.getBindingAdapterPosition());
+                        int position = viewHolder.getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Track t = adapter.getItem(position);
+                            removeTrack(t, position);
+                        }
                     }
                 };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -103,5 +107,32 @@ public class MainActivity extends AppCompatActivity {
     private void addTrack() {
         Intent intent = new Intent(MainActivity.this, AddTrackActivity.class);
         startActivity(intent);
+    }
+
+    private void removeTrack(Track track, final int position) {
+        TrackService trackService = API.getTrackService();
+        Call<Void> call = trackService.deleteTrack(track.getId());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    adapter.remove(position);
+                    Toast.makeText(MainActivity.this, "Track deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    String msg = "Error in retrofit: " + response.code();
+                    Log.e(TAG, msg);
+                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                    adapter.notifyItemChanged(position);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                String msg = "Error in retrofit: " + t.getMessage();
+                Log.e(TAG, msg, t);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                adapter.notifyItemChanged(position);
+            }
+        });
     }
 }
