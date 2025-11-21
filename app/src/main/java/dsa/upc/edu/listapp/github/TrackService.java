@@ -19,8 +19,8 @@ public interface TrackService {
     @DELETE("tracks/{id}")
     Call<Void> deleteTrack(@Path("id") String id);
 
-    @PUT("tracks/{id}")
-    Call<Track> updateTrack(@Path("id") String id, @Body TrackRequest request);
+    @PUT("tracks")
+    Call<Void> updateTrack(@Body TrackRequest request);
 
     @POST("tracks")
     Call<Track> newTrack(@Body TrackRequest request);

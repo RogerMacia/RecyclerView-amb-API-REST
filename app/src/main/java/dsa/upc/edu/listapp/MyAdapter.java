@@ -1,5 +1,7 @@
 package dsa.upc.edu.listapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +78,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         Glide.with(holder.icon.getContext())
                 .load("http://147.83.7.203:8080/img/logodsa.png")
                 .into(holder.icon);
+
+        holder.layout.setOnClickListener(
+            v -> {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, ModifyTrackActivity.class);
+                intent.putExtra("track_id", t.getId());
+                intent.putExtra("track_title", t.getTitle());
+                intent.putExtra("track_singer", t.getSinger());
+                context.startActivity(intent);
+            }
+        );
     }
 
     @Override
